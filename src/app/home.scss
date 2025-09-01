@@ -1,0 +1,42 @@
+.bigthing {
+    width: 411px;
+    height: 823px;
+    background-image: url(/Baggrund.png);
+
+}
+
+
+.tekstindhold {
+    margin-left: 30px;
+}
+
+.lilletekst {
+    font-size: 36px;
+    color: #4b4646;
+    font-family: var(--font-roboto);
+    position: absolute;
+    top: 10.5em;
+    text-align: center;
+
+}
+
+.stortekst {
+    font-size: 72px;
+    color: #E856EB;
+    font-family: var(--font-roboto);
+    position: absolute;
+    top: 5.5em;
+    text-align: center;
+}
+
+.forside_knap {
+    background-color: #5E2E53;
+    color: white;
+    width: 249px;
+    height: 54px;
+    border-radius: 10%;
+    position: absolute;
+    top: 45.5em;
+    align-items: center;
+    margin-left: 90px;
+}

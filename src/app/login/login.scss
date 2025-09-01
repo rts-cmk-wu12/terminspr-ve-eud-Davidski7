@@ -1,0 +1,33 @@
+.bigthing {
+    width: 411px;
+    height: 823px;
+    background-image: url(/Baggrund.png);
+
+}
+
+.input_content {
+    width: 332px;
+    height: 50px;
+    background-color: #EAEAEA;
+}
+
+.big_headline {
+    font-size: 48px;
+    color: white;
+    font-family: var(--font-roboto);
+}
+
+.forside_knap {
+    position: absolute;
+    bottom: 20px;
+    left: 30%;
+    background-color: #5E2E53;
+    color: white;
+    width: 249px;
+    height: 54px;
+    border-radius: 10px;
+    border: none;
+    cursor: pointer;
+    font-family: var(--font-roboto);
+    font-size: 18px;
+}

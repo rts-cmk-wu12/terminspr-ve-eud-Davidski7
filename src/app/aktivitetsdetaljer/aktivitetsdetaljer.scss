@@ -1,0 +1,32 @@
+.text_information {
+    color: white;
+    font-family: var(--font-roboto);
+    font-size: 18px;
+    top: 5px;
+}
+
+.photo_overlay {
+    position: relative;
+    display: inline-block;
+}
+
+.cardbillede {
+    width: 411px;
+    height: 489px;
+    display: block;
+}
+
+.forside_knap {
+    position: absolute;
+    bottom: 20px;
+    left: 30%;
+    background-color: #5E2E53;
+    color: white;
+    width: 249px;
+    height: 54px;
+    border-radius: 10px;
+    border: none;
+    cursor: pointer;
+    font-family: var(--font-roboto);
+    font-size: 18px;
+}
