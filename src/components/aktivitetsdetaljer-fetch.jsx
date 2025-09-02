@@ -1,5 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
+import { cookies } from "next/headers";
 
 
 // noget af koden på denne side er noget som jeg har brugt i en tidligere opgave (Eksamesforberedelse)
@@ -8,10 +9,13 @@ export default async function AktivitetsDetaljerFetch({ id }) {
 
 
 
+    const cookieStore = cookies();
+    const token = cookieStore.get("auth_token")?.value;
+
 
     const response = await fetch(`http://localhost:4000/api/v1/activities/${id}`, {
         headers: {
-            "Authorization": `Bearer `
+            "Authorization": `Bearer ${token || ""}`
         }
     });
 
@@ -29,11 +33,10 @@ export default async function AktivitetsDetaljerFetch({ id }) {
                     alt={data.name}
                     className="cardbillede"
                 />
-                <Link href="/login">
-                    <button className="forside_knap">
-                        Kom i gang
-                    </button>
+                <Link href={token ? "/kalenderdefault" : "/login"}>
+                    <button className="forside_knap">Tilmeld</button>
                 </Link>
+
             </div>
             <div className="text_information">
                 <h1>{data.name}</h1>
