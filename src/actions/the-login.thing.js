@@ -1,13 +1,12 @@
 "use server";
 
 
-// Meget af koden på den her side er taget fra en tidligere opgave
+// Noget af koden er fra mine tidligere opgaver
+
 import { cookies } from "next/headers";
 import z from "zod";
 
 export default async function theLoginThing(prevState, formData) {
-
-
     const username = formData.get("username");
     const password = formData.get("password");
 
@@ -41,13 +40,25 @@ export default async function theLoginThing(prevState, formData) {
         };
     }
 
-
-
     const data = await response.json();
 
 
-    const cookieStore = cookies();
+    const cookieStore = await cookies();
+
     cookieStore.set("auth_token", data.token, {
+        httpOnly: true,
+        maxAge: 60 * 30,
+        path: "/"
+    });
+
+
+    cookieStore.set("user_id", data.userId.toString(), {
+        httpOnly: true,
+        maxAge: 60 * 30,
+        path: "/"
+    });
+
+    cookieStore.set("user_role", data.role, {
         httpOnly: true,
         maxAge: 60 * 30,
         path: "/"

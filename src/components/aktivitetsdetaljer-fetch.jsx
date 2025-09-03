@@ -1,26 +1,24 @@
 import Image from "next/image";
-import Link from "next/link";
 import { cookies } from "next/headers";
+import TilmeldButton from "./tilmeldbutton";
 
 
-// noget af koden på denne side er noget som jeg har brugt i en tidligere opgave (Eksamesforberedelse)
+// Noget af koden er fra mine tidligere opgaver
+
+
 export default async function AktivitetsDetaljerFetch({ id }) {
-
-
-
-
-    const cookieStore = cookies();
+    const cookieStore = await cookies();
     const token = cookieStore.get("auth_token")?.value;
-
+    const userId = cookieStore.get("user_id")?.value;
 
     const response = await fetch(`http://localhost:4000/api/v1/activities/${id}`, {
         headers: {
             "Authorization": `Bearer ${token || ""}`
-        }
+        },
+        cache: "no-store"
     });
 
     const data = await response.json();
-    console.log("data", data);
 
     return (
         <>
@@ -33,10 +31,11 @@ export default async function AktivitetsDetaljerFetch({ id }) {
                     alt={data.name}
                     className="cardbillede"
                 />
-                <Link href={token ? "/kalenderdefault" : "/login"}>
-                    <button className="forside_knap">Tilmeld</button>
-                </Link>
-
+                <TilmeldButton
+                    activityId={id}
+                    token={token}
+                    userId={userId}
+                />
             </div>
             <div className="text_information">
                 <h1>{data.name}</h1>
@@ -45,5 +44,5 @@ export default async function AktivitetsDetaljerFetch({ id }) {
                 <p>Alder: {data.minAge} - {data.maxAge}</p>
             </div>
         </>
-    )
+    );
 }

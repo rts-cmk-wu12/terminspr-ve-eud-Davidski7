@@ -1,0 +1,37 @@
+.fix_tittle {
+    font-size: 36px;
+    color: white;
+    padding: 20px;
+    position: sticky;
+    top: 0;
+    z-index: 999;
+}
+
+
+.list_items {
+    width: 356px;
+    height: 107px;
+    background-color: #EAEAEA;
+}
+
+.activities_container {
+    margin-top: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    width: 360px;
+}
+
+.activity_box {
+    background-color: #EAEAEA;
+    padding: 15px;
+    border-radius: 10px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    height: 107px;
+    width: 356px;
+    margin-left: 30px;
+}
+
+.activity_name {
+    font-size: 30px;
+}

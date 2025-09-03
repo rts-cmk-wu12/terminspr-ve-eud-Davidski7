@@ -1,5 +1,9 @@
 "use client";
 
+
+// Noget af koden er fra mine tidligere opgaver
+
+
 import theLoginThing from "@/actions/the-login.thing";
 import { useActionState } from "react";
 import { useRouter } from "next/navigation";
@@ -17,7 +21,7 @@ export default function LoginForm() {
 
     useEffect(() => {
         if (formState?.success) {
-            router.push("/kalenderdefault");
+            router.push("/aktiviteter");
         }
     }, [formState, router]);
 
