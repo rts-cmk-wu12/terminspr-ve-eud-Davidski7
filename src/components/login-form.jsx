@@ -8,7 +8,7 @@ import theLoginThing from "@/actions/the-login.thing";
 import { useActionState } from "react";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
-import { PacmanLoader } from "react-spinners";
+import { BeatLoader } from "react-spinners";
 
 const override = {
     display: "block",
@@ -26,7 +26,7 @@ export default function LoginForm() {
     }, [formState, router]);
 
     return isPending ? (
-        <PacmanLoader color="yellow" loading={true} cssOverride={override} size={150} />
+        <BeatLoader color="yellow" loading={true} cssOverride={override} size={50} />
     ) : (
         <form className="form_items" action={formAction}>
             <div>

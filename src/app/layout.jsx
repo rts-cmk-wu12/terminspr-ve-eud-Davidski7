@@ -14,7 +14,7 @@ const roboto = Roboto({
 
 export const metadata = {
   title: {
-    template: "%s | David Simonsen",
+    template: "%s | Landrup Dans",
     default: "Landrup Dans"
   },
   description: "En App hvor du kan tilmelde dig forskellige arktivitetter",

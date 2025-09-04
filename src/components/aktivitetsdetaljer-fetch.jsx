@@ -15,7 +15,6 @@ export default async function AktivitetsDetaljerFetch({ id }) {
         headers: {
             "Authorization": `Bearer ${token || ""}`
         },
-        cache: "no-store"
     });
 
     const data = await response.json();

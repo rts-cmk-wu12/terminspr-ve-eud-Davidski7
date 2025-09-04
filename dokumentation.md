@@ -9,7 +9,8 @@ David Alexander Simonsen
 
 http://localhost:3000/aktiviteter
 
-Jeg har lavet valgfri ...
+Jeg har lavet valgfriopgave A og har valgt at oploade den på Render.com ()
+...
 
 
 ## Tech-stack
@@ -36,7 +37,7 @@ import theLoginThing from "@/actions/the-login.thing";
 import { useActionState } from "react";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
-import { PacmanLoader } from "react-spinners";
+import { BeatLoader } from "react-spinners";
 
 const override = {
     display: "block",
@@ -54,7 +55,7 @@ export default function LoginForm() {
     }, [formState, router]);
 
     return isPending ? (
-        <PacmanLoader color="yellow" loading={true} cssOverride={override} size={150} />
+        <BeatLoader color="yellow" loading={true} cssOverride={override} size={50} />
     ) : (
         <form className="form_items" action={formAction}>
             <div>
@@ -75,8 +76,30 @@ export default function LoginForm() {
         </form>
     );
 }
-
 ```
-Jeg starter med at lave at lave mine const 
+## kode-Forklaring
+Først importerer jeg de ting jeg skal bruge, fx theLoginThing (min login-funktion), useActionState, useRouter, useEffect og en loader (BeatLoader).
+
+Jeg starter med at lave mine const – her får jeg formState, formAction og isPending fra useActionState. Jeg henter også router fra Next.js til navigation.
+
+Med useEffect tjekker jeg, om login lykkes (formState?.success), og hvis ja, så sender jeg brugeren videre til /aktiviteter.
+
+Hvis isPending er true, viser jeg en gul loader.
+
+Ellers viser jeg selve login-formularen, hvor man kan skrive brugernavn og kodeord. Eventuelle fejl (errors) bliver vist under felterne.
+
+Til sidst er der en knap til at logge ind, og nederst vises evt. generelle fejlbeskeder
+
+## Ændringer/Valg jeg har taget
+1. jeg har valgt at man godt kan bevæge sig rundt på appen uden at være logget ind. Mest fordi jeg tænke at det kunne give en fed oplevse at man kunne se aktiviteter før man logger ind, så man ligeso kan tjek tingene ud uden at man behvøer at være logget ind først, men man kan selvfølelig ikke Tilmelde sig før man er logget ind.
+2. Jeg har valgt at lave en Afmeld knap på kalender siden, så man ikke behøver ind på details siden men så man kan gære det direkte fra kalenderen. Så tilføjede jeg at der kommer en pop up om du er sikker på at du vil Afmelde denne aktivitet hvor du så kan man så sige JA eller Nej
+3. Jeg har valgt at lave en masse if til forskellige problemer på siden
+```jsx
+//   eksempel 
+  if (!token || !userId) {
+        return <p className="fejl_besked">Du skal logge ind for at se dine aktiviteter.</p>;
+    }
+``` 
+For at gøre det mest mulig hensigtsmæssigt for bruger så man ikke på noget tidspunkt er i tvivl om hvad der sker 
 
 
