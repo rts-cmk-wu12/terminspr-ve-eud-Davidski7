@@ -19,7 +19,6 @@ export default async function KalenderHoldoversigtItems({ activityId }) {
     }
 
     const aktiviteter = await response.json();
-    console.log("Activity response:", aktiviteter);
 
 
     const deltagere = aktiviteter.users || aktiviteter.deltagere || [];

@@ -15,7 +15,6 @@ export default async function AktiviteterFetch() {
     });
 
     const data = await response.json();
-    console.log("data", data);
 
     return (
         <>
