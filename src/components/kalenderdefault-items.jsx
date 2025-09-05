@@ -10,9 +10,7 @@ export default async function KalenderDefaultItems() {
     const userId = cookieStore.get("user_id")?.value;
     const role = cookieStore.get("user_role")?.value;
 
-    if (!token || !userId) {
-        return <p className="fejl_besked">Du skal logge ind for at se dine aktiviteter.</p>;
-    }
+
 
     const response = await fetch(`http://localhost:4000/api/v1/users/${userId}`, {
         headers: { "Authorization": `Bearer ${token}` }
@@ -33,7 +31,7 @@ export default async function KalenderDefaultItems() {
     return (
         <>
             <h1 className="fix_tittle">Kalender</h1>
-            <div className="activities_container">
+            <div className="aktiviteter_container">
                 {aktiviteter.map((aktivitet) => (
                     <Link
                         key={aktivitet.id}
@@ -43,9 +41,9 @@ export default async function KalenderDefaultItems() {
                                 : `/aktivitetsdetaljer/${aktivitet.id}`
                         }
                     >
-                        <div className="activity_box">
-                            <p className="activity_name">{aktivitet.name}</p>
-                            <p className="activity_time">
+                        <div className="aktivitet_box">
+                            <p className="aktivitet_name">{aktivitet.name}</p>
+                            <p className="aktivitet_time">
                                 {aktivitet.weekday} kl. {aktivitet.time}
                             </p>
                             <AfmeldButton

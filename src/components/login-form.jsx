@@ -9,6 +9,7 @@ import { useActionState } from "react";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 import { BeatLoader } from "react-spinners";
+import Link from "next/link";
 
 const override = {
     display: "block",
@@ -28,22 +29,28 @@ export default function LoginForm() {
     return isPending ? (
         <BeatLoader color="yellow" loading={true} cssOverride={override} size={50} />
     ) : (
-        <form className="form_items" action={formAction}>
-            <div>
-                <h1 className="big_headline">Login</h1>
-                <label>
-                    <input className="input_content" placeholder="Brugernavn" type="text" name="username" />
-                    <p>{formState?.properties?.username?.errors}</p>
-                </label>
-            </div>
-            <div>
-                <label>
-                    <input className="input_content" placeholder="Adgangskode" type="password" name="password" />
-                    <p>{formState?.properties?.password?.errors}</p>
-                </label>
-            </div>
-            <button className="forside_knap" type="submit">Log ind</button>
-            <p>{formState?.errors}</p>
-        </form>
+        <div className="baground_img" >
+            <form className="form_items" action={formAction}>
+                <div>
+                    <h1 className="big_headline">Login</h1>
+
+                    <label>
+                        <input className="input_content" placeholder="Brugernavn" type="text" name="username" />
+                        <p>{formState?.properties?.username?.errors}</p>
+                    </label>
+                </div>
+                <div>
+                    <label>
+                        <input className="input_content" placeholder="Adgangskode" type="password" name="password" />
+                        <p>{formState?.properties?.password?.errors}</p>
+                    </label>
+                </div>
+                <button className="forside_knap" type="submit">Log ind</button>
+                <p>{formState?.errors}</p>
+                <Link href="/opretbruger">
+                    <button className="opret_bruger" >Opret Bruger</button>
+                </Link>
+            </form>
+        </div>
     );
 }

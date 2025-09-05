@@ -19,12 +19,6 @@
 
 }
 
-.baground_img {
-    background-color: #5e2e5373;
-    width: 100%;
-
-}
-
 .big_headline {
     font-size: 36px;
     color: white;
@@ -61,21 +55,7 @@
     transition: all 0.2s ease;
 }
 
-.opret_bruger {
-    background-color: #5e2e53;
-    color: white;
-    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.3);
-    width: 129px;
-    height: 34px;
-    border-radius: 8px;
-}
 
 .forside_knap:hover {
     background-color: #752d66;
-}
-
-.error {
-    font-size: 12px;
-    color: red;
-    margin-top: 4px;
 }

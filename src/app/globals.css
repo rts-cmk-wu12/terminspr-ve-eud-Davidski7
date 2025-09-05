@@ -37,7 +37,8 @@ body {
 
 body {
     max-width: 411px;
-    min-height: 1000px;
+    min-height: 823px;
     max-height: 1200px;
     background-color: #5E2E53;
+    font-family: var(--font-roboto);
 }

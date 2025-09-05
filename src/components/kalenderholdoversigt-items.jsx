@@ -14,9 +14,6 @@ export default async function KalenderHoldoversigtItems({ activityId }) {
         headers: { Authorization: `Bearer ${token}` },
     });
 
-    if (!response.ok) {
-        return <p>Kunne ikke hente aktivitet.</p>;
-    }
 
     const aktiviteter = await response.json();
 

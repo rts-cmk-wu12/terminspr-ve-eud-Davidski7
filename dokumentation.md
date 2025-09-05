@@ -9,7 +9,7 @@ David Alexander Simonsen
 
 http://localhost:3000/aktiviteter
 
-Jeg har lavet valgfriopgave A og har valgt at oploade den på Render.com ()
+Jeg har lavet valgfriopgave B som betyder at man skal kunne oprette bruger selv 
 ...
 
 
@@ -28,76 +28,116 @@ En udvidelse til CSS, som lader mig lave funktioner, variabler, mixins og nestin
 Et interface til at få adgang til Landrup Dans's data, så jeg kan lave min egen app.
 * **Zod**  
 Et valideringsbibliotek til objekter og strings. Jeg bruger Zod til blandt andet at validere bruger-input fra formularer.
+* **react-spinners**
+Et Loader-bibliotek, som er beregnet til React. Hvor du kan finde forskellige funktionelle Loaders 
 
 
 ## kode-eksempel
-(src/components/featuredcard.jsx)
+(src/components/login-form.jsx)
 ```jsx
-import theLoginThing from "@/actions/the-login.thing";
-import { useActionState } from "react";
-import { useRouter } from "next/navigation";
-import { useEffect } from "react";
-import { BeatLoader } from "react-spinners";
+"use server";
 
-const override = {
-    display: "block",
-    margin: "0 auto",
-};
+import { cookies } from "next/headers";
+import z from "zod";
 
-export default function LoginForm() {
-    const [formState, formAction, isPending] = useActionState(theLoginThing);
-    const router = useRouter();
+export default async function theLoginThing(prevState, formData) {
+    const username = formData.get("username");
+    const password = formData.get("password");
 
-    useEffect(() => {
-        if (formState?.success) {
-            router.push("/aktiviteter");
-        }
-    }, [formState, router]);
+    const schema = z.object({
+        username: z.string().min(1, { message: "Brugernavn skal være udfyldt" }),
+        password: z.string().min(1, { message: "Adgangskode skal være udfyldt" })
+    });
 
-    return isPending ? (
-        <BeatLoader color="yellow" loading={true} cssOverride={override} size={50} />
-    ) : (
-        <form className="form_items" action={formAction}>
-            <div>
-                <h1 className="big_headline">Login</h1>
-                <label>
-                    <input className="input_content" placeholder="Brugernavn" type="text" name="username" />
-                    <p>{formState?.properties?.username?.errors}</p>
-                </label>
-            </div>
-            <div>
-                <label>
-                    <input className="input_content" placeholder="Adgangskode" type="password" name="password" />
-                    <p>{formState?.properties?.password?.errors}</p>
-                </label>
-            </div>
-            <button className="forside_knap" type="submit">Log ind</button>
-            <p>{formState?.errors}</p>
-        </form>
-    );
+    const validated = schema.safeParse({ username, password });
+
+    if (!validated.success) {
+        return {
+            ...validated,
+            ...(z.treeifyError(validated.error))
+        };
+    }
+
+    const response = await fetch("http://localhost:4000/auth/token", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+            username: validated.data.username,
+            password: validated.data.password
+        })
+    });
+
+    if (!response.ok) {
+        return {
+            success: false,
+            errors: ["Brugernavn eller adgangskode er forkert"]
+        };
+    }
+
+    const data = await response.json();
+
+
+    const cookieStore = await cookies();
+
+    cookieStore.set("auth_token", data.token, {
+        httpOnly: true,
+        maxAge: 60 * 30,
+        path: "/"
+    });
+
+
+    cookieStore.set("user_id", data.userId.toString(), {
+        httpOnly: true,
+        maxAge: 60 * 30,
+        path: "/"
+    });
+
+    cookieStore.set("user_role", data.role, {
+        httpOnly: true,
+        maxAge: 60 * 30,
+        path: "/"
+    });
+
+    return { success: true };
 }
+
+
 ```
 ## kode-Forklaring
-Først importerer jeg de ting jeg skal bruge, fx theLoginThing (min login-funktion), useActionState, useRouter, useEffect og en loader (BeatLoader).
+Først importerer jeg de ting, jeg skal bruge – cookies fra Next.js, så jeg kan gemme loginoplysninger som cookies på serveren, og zod, som jeg bruger til at validere at inputfelterne er udfyldt korrekt.
 
-Jeg starter med at lave mine const – her får jeg formState, formAction og isPending fra useActionState. Jeg henter også router fra Next.js til navigation.
+Derefter laver jeg min serverfunktion theLoginThing, som modtager det tidligere state (prevState) og de indtastede data (formData).
 
-Med useEffect tjekker jeg, om login lykkes (formState?.success), og hvis ja, så sender jeg brugeren videre til /aktiviteter.
+Jeg starter med at hente brugernavn og adgangskode ud af formData.
 
-Hvis isPending er true, viser jeg en gul loader.
+Så definerer jeg et zod-schema, der siger, at både username og password skal være udfyldt. Hvis schemaet finder fejl (fx tomme felter), returnerer jeg de fejlbeskeder, som brugeren skal se.
 
-Ellers viser jeg selve login-formularen, hvor man kan skrive brugernavn og kodeord. Eventuelle fejl (errors) bliver vist under felterne.
+Hvis valideringen går igennem, sender jeg en POST-request til mit backend-API på http://localhost:4000/auth/token, hvor jeg sender brugernavn og kodeord i body.
 
-Til sidst er der en knap til at logge ind, og nederst vises evt. generelle fejlbeskeder
+Hvis backend svarer med en fejl (dvs. status ikke er OK), returnerer jeg et objekt med success: false og en generel fejlbesked om, at brugernavn eller adgangskode er forkert.
+
+Ellers henter jeg JSON-svaret fra backend, som indeholder et login-token, brugerens id og brugerens rolle.
+
+Herefter bruger jeg cookies() til at gemme disse oplysninger i cookies på serveren:
+
+auth_token → selve tokenet, som bruges til at identificere brugeren.
+
+user_id → det unikke id for brugeren.
+
+user_role → brugerens rolle (fx admin eller almindelig bruger).
+
+Alle cookies bliver sat med httpOnly (så de ikke kan læses fra JavaScript i browseren), og de udløber efter 30 minutter.
+
+Til sidst returnerer jeg { success: true }, så resten af app’en kan se, at login lykkedes, og f.eks. sende brugeren videre til en ny side.
 
 ## Ændringer/Valg jeg har taget
 1. jeg har valgt at man godt kan bevæge sig rundt på appen uden at være logget ind. Mest fordi jeg tænke at det kunne give en fed oplevse at man kunne se aktiviteter før man logger ind, så man ligeso kan tjek tingene ud uden at man behvøer at være logget ind først, men man kan selvfølelig ikke Tilmelde sig før man er logget ind.
 2. Jeg har valgt at lave en Afmeld knap på kalender siden, så man ikke behøver ind på details siden men så man kan gære det direkte fra kalenderen. Så tilføjede jeg at der kommer en pop up om du er sikker på at du vil Afmelde denne aktivitet hvor du så kan man så sige JA eller Nej
-3. Jeg har valgt at lave en masse if til forskellige problemer på siden
+3. Jeg har valgt at lave en masse if så brugerne ligesom ved hvis man ikke har tilmeldt sig nogen aktivitet så ved brugern det fordi der kommer en fejlbesked frem
 ```jsx
 //   eksempel 
-  if (!token || !userId) {
-        return <p className="fejl_besked">Du skal logge ind for at se dine aktiviteter.</p>;
+    if (aktiviteter.length === 0) {
+        return <p className="fejl_besked">Du har ikke tilmeldt dig nogen aktiviteter endnu.</p>;
     }
 ``` 
 For at gøre det mest mulig hensigtsmæssigt for bruger så man ikke på noget tidspunkt er i tvivl om hvad der sker 

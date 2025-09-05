@@ -3,7 +3,7 @@ import Footer from "@/components/footer/footer";
 import "./kalenderdefault.scss";
 
 export const metadata = {
-    title: "KalenderDefault"
+    title: "Kalenderdefault"
 };
 
 export default function KalenderDefault() {
